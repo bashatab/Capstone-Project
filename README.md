@@ -1,43 +1,36 @@
-# Module 1: Data Pipeline
+# Module 2: Analytics Pipeline
 
-## Overview
-
-This module implements an end-to-end ETL workflow:
-
-1. Scrape the first five pages from Books to Scrape.
-2. Capture title, GBP price, rating, availability and category.
-3. Clean fields into typed columns.
-4. Convert price using the required fixed rate: **1 GBP = 105.50 INR**.
-5. Load data into normalized SQLite `categories` and `books` tables.
-6. Execute SQL queries covering SELECT, WHERE, ORDER BY, LIMIT, DISTINCT, BETWEEN, IN and JOIN.
-7. Reproduce the SQL JOIN with `pandas.merge()` and verify matching output.
-
-## Install
-
-```bash
-python -m pip install -r data_pipeline/requirements.txt
-```
+This module implements one cohesive Titanic analytics and machine-learning workflow.
 
 ## Run
 
 From the repository root:
 
 ```bash
-python data_pipeline/data_pipeline.py
+python -m pip install -r analytics/requirements.txt
+python analytics/module2_analytics.py
 ```
 
-## Generated files
+The first successful run uses `sns.load_dataset("titanic")` and immediately saves `analytics/titanic.csv`. Later runs use only that committed CSV.
 
-- `books_raw.csv`
-- `books_cleaned.csv`
-- `zepto_books.db`
-- `query_outputs.txt`
-- `join_comparison.csv`
+## Generated deliverables
 
-## Cleaning decision
+- `titanic.csv`: offline fallback
+- `generated_report.md`: measured results and written interpretations
+- `classification_metrics.csv`
+- `imbalance_comparison.csv`
+- `regression_metrics.csv`
+- `best_classification_pipeline.joblib`
+- `charts/`: univariate plots, four data-story charts, correlation heatmap, confusion matrices, ROC curves, decision tree and residual plot
 
-Rows missing a required factual field are dropped rather than inventing category, rating or stock information. The program prints missing-value and removed-row counts.
+## Design decisions
 
-## Security note
+- EDA missing-value handling follows the assignment thresholds and records exact measured percentages.
+- Modeling starts with a stratified split before preprocessing.
+- Numeric imputation/scaling and categorical imputation/encoding are inside a `ColumnTransformer` and `Pipeline`, so preprocessing is fitted on training data only.
+- SMOTE is inside an imbalanced-learn pipeline and therefore applies only during training.
+- The saved artifact is the complete fitted pipeline, not only the estimator.
 
-`truststore` uses the operating system trust store on managed Windows devices. Certificate verification is not disabled.
+## Important
+
+Review `generated_report.md` after execution. Use the actual measured values and rewrite the interpretations in your own words before submission.

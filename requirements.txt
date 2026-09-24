@@ -1,5 +1,8 @@
-requests
-beautifulsoup4
 pandas
-tabulate
+numpy
+seaborn
+matplotlib
+scikit-learn
+imbalanced-learn
+joblib
 truststore
